@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#060917">
+<title>GSA PyForge · Where Code Is Forged.</title>
+<script src="coi-serviceworker.js"></script>
+<style>
+  :root { --bg0:#060917; --bg1:#0c1230; --char:#171c2e; --panel:#090e20; --cyan:#22e4ff; --green:#39ff88; --purple:#9b6bff; --rose:#ff5f8a; --ink:#d6e2ff; --dim:#6574a6; --code:16px; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { height: 100vh; height: 100dvh; display: flex; color: var(--ink);
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    font: 16px/1.4 ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+    background: radial-gradient(900px 500px at 12% -10%, rgba(155,107,255,.24), transparent 60%),
+      radial-gradient(700px 500px at 100% 0, rgba(34,228,255,.14), transparent 55%),
+      linear-gradient(rgba(34,228,255,.045) 1px, transparent 1px) 0 0/100% 32px,
+      linear-gradient(90deg, rgba(34,228,255,.045) 1px, transparent 1px) 0 0/32px 100%,
+      linear-gradient(180deg, var(--bg1), var(--bg0)); }
+  .app { flex: 1; min-width: 0; max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+  .mono { font: 400 var(--code)/24px ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0; font-variant-ligatures: none; tab-size: 4; }
+
+  header { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(34,228,255,.28); box-shadow: 0 1px 0 rgba(155,107,255,.3); }
+  .logo { width: 28px; height: 40px; flex: none; fill: var(--cyan); shape-rendering: crispEdges; filter: drop-shadow(0 0 6px rgba(34,228,255,.8)); }
+  .brand { margin-right: auto; min-width: 0; }
+  h1 { margin: 0; font-size: 1.5rem; line-height: 1.1; letter-spacing: .18em; color: var(--cyan); text-shadow: 0 0 12px rgba(34,228,255,.7), 2px 2px 0 rgba(155,107,255,.85); }
+  .tagline { margin: 3px 0 0; font-size: .82rem; letter-spacing: .1em; color: #b9a3ff; }
+  .led { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid rgba(155,107,255,.5); border-radius: 999px; background: rgba(9,14,32,.85); font-size: .82rem; letter-spacing: .05em; color: #b9a3ff; white-space: nowrap; }
+  .led i { width: 10px; height: 10px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 9px var(--purple); animation: pulse 1.2s ease-in-out infinite; }
+  .led[data-state=ready] { color: var(--green); border-color: rgba(57,255,136,.5); }
+  .led[data-state=ready] i { background: var(--green); box-shadow: 0 0 10px var(--green); animation: none; }
+  .led[data-state=running] { color: var(--cyan); border-color: rgba(34,228,255,.5); }
+  .led[data-state=running] i { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); animation-duration: .5s; }
+  @keyframes pulse { 50% { opacity: .3; } }
+
+  .panel { flex: 1 1 0; min-height: 140px; display: flex; padding: 1px; background: linear-gradient(135deg, var(--cyan), var(--purple));
+    clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); }
+  .editor-panel { flex-grow: 3; }
+  .console-panel { flex-grow: 2; }
+  .panel-in { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--panel);
+    clip-path: polygon(13px 0, 100% 0, 100% calc(100% - 13px), calc(100% - 13px) 100%, 0 100%, 0 13px); }
+  .panel-bar { display: flex; align-items: center; gap: 10px; padding: 8px 16px 8px 24px; background: var(--char); border-bottom: 1px solid rgba(155,107,255,.3); font-size: .78rem; letter-spacing: .22em; color: var(--cyan); }
+  .px { display: flex; gap: 4px; }
+  .px b { width: 6px; height: 6px; background: var(--cyan); }
+  .px b:nth-child(2) { background: var(--green); } .px b:nth-child(3) { background: var(--purple); }
+  .tag { margin-left: auto; color: var(--dim); letter-spacing: .05em; }
+
+  .editor-body { flex: 1; min-height: 0; display: flex; background: #080c1c; }
+  #gutter { margin: 0; padding: 12px 10px 60px 14px; text-align: right; color: #46538a; background: #0a0f24; border-right: 1px solid rgba(155,107,255,.22); overflow: hidden; user-select: none; -webkit-user-select: none; }
+  .code { position: relative; flex: 1; min-width: 0; }
+  #hl, #editor { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 12px 14px 24px; border: 0; border-radius: 0; white-space: pre; }
+  #hl { overflow: hidden; pointer-events: none; color: var(--ink); }
+  #hl code { font: inherit; }
+  #editor { overflow: auto; resize: none; outline: none; background: transparent; color: transparent; -webkit-text-fill-color: transparent; caret-color: var(--cyan); -webkit-appearance: none; appearance: none; overscroll-behavior: contain; scrollbar-color: #33406e transparent; }
+  #editor::selection { background: rgba(34,228,255,.28); }
+  #hl i { font-style: normal; }
+  .k { color: #c792ff; } .s { color: #7dffb0; } .n { color: #ffd166; } .c { color: #5c6a99; }
+  .f { color: var(--cyan); } .b { color: #7fdcff; } .d { color: #fff; }
+
+  .deck { display: flex; align-items: center; gap: 12px; padding-bottom: 4px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 48px; padding: 0 24px; border: 0; border-radius: 6px; font: 700 .95rem ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace; letter-spacing: .16em; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: transform .06s, box-shadow .06s; }
+  .btn svg { width: 14px; height: 14px; fill: currentColor; }
+  .btn-run { background: var(--green); color: #04210f; box-shadow: 0 4px 0 #11924a, 0 0 22px rgba(57,255,136,.4); }
+  .btn-stop { background: var(--purple); color: #fff; box-shadow: 0 4px 0 #53309f, 0 0 22px rgba(155,107,255,.4); }
+  .btn-clear { margin-left: auto; background: transparent; color: var(--cyan); border: 2px solid var(--cyan); box-shadow: 0 4px 0 #0d6573; }
+  .btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.5); }
+  .btn:disabled { opacity: .4; filter: saturate(.3); box-shadow: 0 4px 0 #1d2440; cursor: not-allowed; }
+  .btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+  .console-wrap { position: relative; flex: 1; min-height: 0; display: flex; background: #04070f; }
+  .console-wrap::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.2) 0 1px, transparent 1px 3px); }
+  #console { flex: 1; min-width: 0; margin: 0; padding: 12px 14px; overflow: auto; white-space: pre-wrap; word-break: break-word; color: var(--green); text-shadow: 0 0 6px rgba(57,255,136,.35); scrollbar-color: #1f6b43 transparent; }
+  #console:empty::before { content: "> Your forged code appears here. Press FORGE CODE to start."; color: var(--dim); text-shadow: none; }
+  .err { color: var(--rose); text-shadow: 0 0 6px rgba(255,95,138,.35); }
+  .stdin { font: inherit; width: 16ch; max-width: 70%; padding: 0 4px; color: #fff; caret-color: var(--cyan); background: rgba(34,228,255,.1); border: 0; border-bottom: 2px solid var(--cyan); border-radius: 0; outline: none; text-shadow: none; }
+
+  @media (max-width: 560px) {
+    h1 { font-size: 1.15rem; } .tagline { font-size: .68rem; letter-spacing: .04em; }
+    .led { padding: 5px 9px; font-size: .72rem; } .tag { display: none; }
+    .btn { padding: 0 14px; letter-spacing: .1em; } .btn-run, .btn-stop { flex: 1; } .btn-clear { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .led i { animation: none; } .btn { transition: none; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand"><h1>⚒️ GSA PYFORGE</h1><p class="tagline">Where Code Is Forged.</p></div>
+    <div class="led" id="led" data-state="loading"><i></i><span id="status" role="status">🔥 Lighting the Forge…</span></div>
+  </header>
+
+  <section class="panel editor-panel"><div class="panel-in">
+    <div class="panel-bar"><span class="px"><b></b><b></b><b></b></span>🔥 THE FORGE<span class="tag">main.py</span></div>
+    <div class="editor-body">
+      <pre id="gutter" class="mono" aria-hidden="true">1</pre>
+      <div class="code">
+        <pre id="hl" class="mono" aria-hidden="true"><code></code></pre>
+        <textarea id="editor" class="mono" wrap="off" aria-label="The Forge, Python code editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+      </div>
+    </div>
+  </div></section>
+
+  <div class="deck">
+    <button id="run" class="btn btn-run" aria-label="Forge code (Run Python)" disabled><svg viewBox="0 0 14 14"><path d="M2 1l11 6-11 6z"/></svg>🔥 FORGE CODE</button>
+    <button id="stop" class="btn btn-stop" aria-label="Stop" disabled><svg viewBox="0 0 14 14"><rect x="2" y="2" width="10" height="10"/></svg>🛑 STOP</button>
+    <button id="clear" class="btn btn-clear" aria-label="Clear console"><svg viewBox="0 0 14 14"><path d="M2 4h10v1.6H2zM5 1h4v2H5zM3 6.5h8l-.7 6.5H3.7z"/></svg>🧹 CLEAR</button>
+  </div>
+
+  <section class="panel console-panel"><div class="panel-in">
+    <div class="panel-bar"><span class="px"><b></b><b></b><b></b></span>⚒️ THE ANVIL<span class="tag">output</span></div>
+    <div class="console-wrap"><pre id="console" class="mono" aria-label="The Anvil, Python output console" aria-live="polite"></pre></div>
+  </div></section>
+</div>
+<script src="app.js"></script>
+<script src="editor-ui.js"></script>
+</body>
+</html>
