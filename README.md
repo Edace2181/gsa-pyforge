@@ -1,84 +1,40 @@
 # ⚒️ GSA PyForge
+
 ### 🔥 Where Code Is Forged.
 
-**GSA PyForge** is a free, browser-based Python programming environment developed as part of the Giant Slayer Academy project.
+## 👋 Welcome to PyForge
 
-Write Python code, execute programs, and interact with a Python console directly from your browser.
+GSA PyForge is a friendly place to learn Python by building and running real programs in your browser. No Python installation is needed—open the site and start forging!
 
-No local Python installation required.
+PyForge is a standalone educational platform associated with **Giant Slayer Academy**. It has its own independent codebase and is designed to help students learn through practice.
 
-## 🌐 Launch GSA PyForge
+## 🔥 THE FORGE
 
-**[🔥 Open GSA PyForge](https://edace2181.github.io/gsa-pyforge/)**
+THE FORGE is your Python editor. Write and revise code here with syntax colors, line numbers, and Tab-key indentation. On a phone, this is your main coding screen.
 
-## ⚒️ The Blacksmith's Workshop
+## ⚒️ THE ANVIL
 
-### 🔥 THE FORGE
-The Python code editor where programs are written and refined.
+THE ANVIL is where your program comes to life. It shows printed results, errors, and questions from `input()`. On a phone, PyForge switches to a full-screen Anvil when you run code. Use **BACK TO FORGE** to keep editing without losing your work.
 
-Features include:
-- Python syntax highlighting
-- Line numbers
-- Multiline editing
-- Automatic indentation with the Tab key
+## 📁 CODE VAULT
 
-### ⚒️ THE ANVIL
-The interactive Python console where programs are executed and results are displayed.
+CODE VAULT keeps programs in this browser. You can create folders, open programs in tabs, save changes, rename files, and restore recovery drafts after a reload.
 
-Features include:
-- Standard Python output
-- Interactive `input()` support
-- Multiple input prompts
-- Syntax and runtime error reporting
+Vault files stay on the same browser and device—they do not sync to the cloud. Use the import and export tools when you want a backup or need to move your code.
 
-## 🛠️ Controls
+## 🎮 Controls
 
-| Control | Function |
-|---|---|
-| 🔥 FORGE CODE | Execute Python code |
-| 🛑 STOP | Terminate a running program |
-| 🧹 CLEAR | Clear both the editor and console |
+- **🔥 FORGE CODE** — Runs the program currently in THE FORGE.
+- **🛑 STOP** — Stops a running program and prepares a fresh Python console.
+- **🧹 CLEAR** — Clears both the editor and the Anvil output.
 
-## 🐍 Technology
+## 📱 Play Anywhere
 
-GSA PyForge is built using:
+Use PyForge in a desktop browser or iPhone Safari. On mobile, choose **Add to Home Screen** for quick app-style access. Your browser must be online when it loads the Python engine.
 
-- HTML5
-- CSS3
-- JavaScript
-- Pyodide
-- Web Workers
-- GitHub Pages
+## 🚀 Start Coding
 
-Python programs execute directly in the browser.
-
-## 📱 Supported Platforms
-
-The application has been tested successfully with:
-
-- Google Chrome on Windows
-- An iPhone browser
-
-Additional browser compatibility testing is ongoing.
-
-## 🚧 Future Development
-
-**Mission 11 — Code Vault**
-
-Planned features include:
-
-- 📁 File-management sidebar
-- 💾 Save and reopen Python programs
-- 📂 Custom folders
-- 📑 Multiple file tabs
-- 📥 Import Python files
-- 📤 Export Python files
-
-These features are under development and are not included in the current release.
-
-## 🏛️ Giant Slayer Academy
-
-GSA PyForge is part of **Giant Slayer Academy**, an educational project focused on developing genuine understanding through practical learning.
+**[Open GSA PyForge](https://edace2181.github.io/gsa-pyforge/)**
 
 **Recognize the Challenge. Understand the Battle. Master the Strategy. Conquer with Knowledge.**
 
