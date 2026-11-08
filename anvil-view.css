@@ -1,0 +1,33 @@
+/* Mission 12: on phones THE FORGE (editor) and THE ANVIL (output) are two full screens. Desktop split view is untouched. */
+#back, #toanvil, .a-status { display: none; }
+.btn .emo { font-size: 1rem; line-height: 1; }
+.btn-back { background: transparent; color: var(--cyan); border: 2px solid var(--cyan); box-shadow: 0 4px 0 #0d6573; }
+.btn-anvil { background: transparent; color: #c9b6ff; border: 2px solid var(--purple); box-shadow: 0 4px 0 #3a2672; }
+.btn-anvil.attn { animation: attn 1s ease-in-out infinite; }
+@keyframes attn { 50% { box-shadow: 0 4px 0 #3a2672, 0 0 18px var(--purple); background: rgba(155,107,255,.28); } }
+
+@media (max-width: 760px) {
+  /* FORGE screen: editor fills the phone; output lives on its own screen */
+  .console-panel { display: none; }
+  #toanvil { display: inline-flex; }
+  .btn-run { flex: 1; white-space: nowrap; padding: 0 10px; letter-spacing: .06em; }
+  .btn-run svg { display: none; }
+  .btn-stop, .btn-clear, .btn-anvil { flex: 0 0 54px; padding: 0; }
+  .btn-stop .lbl, .btn-clear .lbl, .btn-anvil .lbl, .btn-stop svg, .btn-clear svg { display: none; }
+
+  /* ANVIL screen */
+  body.anvil-view header, body.anvil-view .editor-panel { display: none; }
+  body.anvil-view .console-panel { display: flex; flex: 1 1 0; }
+  body.anvil-view .btn-run, body.anvil-view .btn-clear, body.anvil-view #toanvil { display: none; }
+  body.anvil-view #back { display: inline-flex; flex: 1; white-space: nowrap; padding: 0 10px; letter-spacing: .05em; }
+  body.anvil-view .btn-back .lbl { display: inline; }
+  body.anvil-view .btn-stop { flex: 0 0 auto; padding: 0 18px; }
+  body.anvil-view .btn-stop .lbl { display: inline; }
+  body.anvil-view .console-panel .tag { display: none; }
+  body.anvil-view .a-status { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; font-size: .72rem; letter-spacing: .04em; color: #b9a3ff; }
+  .a-status::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 8px var(--purple); }
+  .a-status[data-state=ready] { color: var(--green); } .a-status[data-state=ready]::before { background: var(--green); box-shadow: 0 0 9px var(--green); }
+  .a-status[data-state=running] { color: var(--cyan); } .a-status[data-state=running]::before { background: var(--cyan); box-shadow: 0 0 9px var(--cyan); }
+  .a-status[data-state=error] { color: var(--rose); } .a-status[data-state=error]::before { background: var(--rose); box-shadow: 0 0 9px var(--rose); }
+}
+@media (prefers-reduced-motion: reduce) { .btn-anvil.attn { animation: none; background: rgba(155,107,255,.28); } }

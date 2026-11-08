@@ -3,6 +3,8 @@
   "use strict";
   const $ = (id) => document.getElementById(id);
   const ed = $("editor"), tabsEl = $("tabs"), treeEl = $("tree"), tagEl = $("filetag"), stateEl = $("savestate");
+  // Prevent edits made while IndexedDB is opening from being replaced by session restoration.
+  ed.readOnly = true; ed.setAttribute("aria-busy", "true");
   const LIM = { file: 1048576, total: 20971520, archive: 26214400, entries: 2000 };
   const S = { nodes: new Map(), tabs: [], active: null, open: new Set(), cur: null, mem: false, loading: false, drafts: new Map(), persisted: false };
   const now = () => Date.now();
@@ -430,6 +432,7 @@
     updateNote(); VaultDB.persist().then((ok) => { S.persisted = ok; updateNote(); });
     if (recovered) toast("Recovered unsaved edits in " + recovered + " program" + (recovered === 1 ? "" : "s") + ". They are drafts until you press SAVE.");
     document.body.classList.add("vault-ready");
+    ed.removeAttribute("aria-busy");
   }
   init();
 })();

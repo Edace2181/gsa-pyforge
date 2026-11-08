@@ -32,6 +32,8 @@
   .led[data-state=ready] i { background: var(--green); box-shadow: 0 0 10px var(--green); animation: none; }
   .led[data-state=running] { color: var(--cyan); border-color: rgba(34,228,255,.5); }
   .led[data-state=running] i { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); animation-duration: .5s; }
+  .led[data-state=error] { color: var(--rose); border-color: rgba(255,95,138,.6); }
+  .led[data-state=error] i { background: var(--rose); box-shadow: 0 0 10px var(--rose); animation: none; }
   @keyframes pulse { 50% { opacity: .3; } }
 
   .panel { flex: 1 1 0; min-height: 140px; display: flex; padding: 1px; background: linear-gradient(135deg, var(--cyan), var(--purple));
@@ -83,6 +85,7 @@
   @media (prefers-reduced-motion: reduce) { .led i { animation: none; } .btn { transition: none; } }
 </style>
 <link rel="stylesheet" href="code-vault.css">
+<link rel="stylesheet" href="anvil-view.css">
 </head>
 <body>
 <div class="shell">
@@ -130,13 +133,15 @@
   </div></section>
 
   <div class="deck">
-    <button id="run" class="btn btn-run" aria-label="Forge code (Run Python)" disabled><svg viewBox="0 0 14 14"><path d="M2 1l11 6-11 6z"/></svg>🔥 FORGE CODE</button>
-    <button id="stop" class="btn btn-stop" aria-label="Stop" disabled><svg viewBox="0 0 14 14"><rect x="2" y="2" width="10" height="10"/></svg>🛑 STOP</button>
-    <button id="clear" class="btn btn-clear" aria-label="Clear console"><svg viewBox="0 0 14 14"><path d="M2 4h10v1.6H2zM5 1h4v2H5zM3 6.5h8l-.7 6.5H3.7z"/></svg>🧹 CLEAR</button>
+    <button id="back" class="btn btn-back" type="button" aria-label="Back to the Forge (editor)"><span class="emo">◀</span><span class="lbl">BACK TO FORGE</span></button>
+    <button id="run" class="btn btn-run" aria-label="Forge code (Run Python)" disabled><svg viewBox="0 0 14 14"><path d="M2 1l11 6-11 6z"/></svg><span class="emo">🔥</span><span class="lbl">FORGE CODE</span></button>
+    <button id="stop" class="btn btn-stop" aria-label="Stop" disabled><svg viewBox="0 0 14 14"><rect x="2" y="2" width="10" height="10"/></svg><span class="emo">🛑</span><span class="lbl">STOP</span></button>
+    <button id="toanvil" class="btn btn-anvil" type="button" aria-label="Open the Anvil (output)"><span class="emo">⚒️</span><span class="lbl">ANVIL</span></button>
+    <button id="clear" class="btn btn-clear" aria-label="Clear console"><svg viewBox="0 0 14 14"><path d="M2 4h10v1.6H2zM5 1h4v2H5zM3 6.5h8l-.7 6.5H3.7z"/></svg><span class="emo">🧹</span><span class="lbl">CLEAR</span></button>
   </div>
 
   <section class="panel console-panel"><div class="panel-in">
-    <div class="panel-bar"><span class="px"><b></b><b></b><b></b></span>⚒️ THE ANVIL<span class="tag">output</span></div>
+    <div class="panel-bar"><span class="px"><b></b><b></b><b></b></span>⚒️ THE ANVIL<span class="tag">output</span><span class="a-status" id="astatus" data-state="loading" role="status" aria-live="polite"></span></div>
     <div class="console-wrap"><pre id="console" class="mono" aria-label="The Anvil, Python output console" aria-live="polite"></pre></div>
   </div></section>
 </div>
@@ -150,5 +155,6 @@
 <script src="vault-db.js"></script>
 <script src="zip-lite.js"></script>
 <script src="code-vault.js"></script>
+<script src="anvil-view.js"></script>
 </body>
 </html>

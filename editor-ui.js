@@ -56,6 +56,6 @@
   const st = $("status"), led = $("led");
   new MutationObserver(() => {
     const t = st.textContent;
-    led.dataset.state = t === "🔥 Forge Ready" ? "ready" : t === "⚒️ Forging Code…" ? "running" : "loading";
+    led.dataset.state = t === "🔥 Forge Ready" ? "ready" : t === "⚒️ Forging Code…" ? "running" : t.startsWith("⚠️") ? "error" : "loading";
   }).observe(st, { childList: true, characterData: true, subtree: true });
 })();

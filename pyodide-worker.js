@@ -29,9 +29,13 @@ onmessage = async ({ data: m }) => {
   if (m.t === "init") {
     ctrl = new Int32Array(m.ctrl);
     buf = new Uint8Array(m.buf);
-    py = await loadPyodide();
-    py.runPython(SETUP);
-    postMessage({ t: "ready" });
+    try {
+      py = await loadPyodide();
+      py.runPython(SETUP);
+      postMessage({ t: "ready" });
+    } catch (e) {
+      postMessage({ t: "fatal", s: String(e && e.message ? e.message : e) });
+    }
   } else if (m.t === "run") {
     const g = py.globals.get("dict")();
     g.set("__name__", "__main__");
